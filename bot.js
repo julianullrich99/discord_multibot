@@ -29,3 +29,7 @@ flipBot.start();
 const eins = require("./eins");
 var einsbot = new eins(client);
 einsbot.start();
+
+const ehre = require("./ehre");
+var ehrenbot = new ehre(client);
+ehrenbot.start();

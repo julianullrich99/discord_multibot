@@ -2,6 +2,7 @@ class bot{
   constructor(client){
     this.client = client;
     this.command = "!1";
+    this.roles = ["Moderator","1"];
   }
 
   start(){
@@ -9,9 +10,12 @@ class bot{
       //console.log("msg",msg.content);
       //console.log("channel",msg.channel.id);
       if (msg.content.startsWith(this.command)){
-        //console.log("message is in channel");
-        //msg.delete();
-	msg.reply("1");
+        if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
+        var command = msg.content.split(" ");
+        var count = (isNaN(+command[1])) ? 1 : +command[1];
+        if (count > 100) count = 100;
+        for (var i = 0; i < count; i++) 
+	      msg.channel.send("1");
 	
       }
     })

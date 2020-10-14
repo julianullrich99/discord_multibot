@@ -21,3 +21,7 @@ delBot.start();
 const multiDeleter = require("./multiDeleter");
 var multiDeletebot = new multiDeleter(client);
 multiDeletebot.start();
+
+const flipper = require("./flipper");
+var flipBot = new flipper(client);
+flipBot.start();

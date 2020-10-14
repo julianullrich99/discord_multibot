@@ -11,6 +11,8 @@ class bot{
       }
     });   
     this.discord = require("discord.js");
+    this.lastHonors = [];
+    this.timeout = 10;
   }
 
   start(){
@@ -49,47 +51,76 @@ class bot{
           });
         } else {
 
+          var userId = msg.author.id;
+
+          var flag = false; // flag wenn der grade gesuchte user schon getimeouted ist und gelöscht wurde und jetzt wieder schreiben darf
+          for (var key in this.lastHonors){
+            if (this.lastHonors.hasOwnProperty(key)){
+              var user = this.lastHonors[key];
+              if (user.time < (new Date()).getTime() - this.timeout * 1000){
+                // wenn der schon getimeoutet ist dann soll der gelöscht werden
+                this.lastHonors.splice(key,1);
+                if (user.id == userId) flag = true;
+              }
+              if (user.id == userId && !flag) {
+                console.log("user can't honor again after this short time");
+                msg.reply(`Du kannst erst in ${((user.time + this.timeout * 1000) - (new Date()).getTime()) / 1000} Sekunden wieder ehren!`);
+                return;
+              }
+            }
+          }
+
           var mentions = msg.mentions.members;
           mentions.forEach(e=>{
-            var userid = e.user.id;
-            var nickname = e.nickname;
+            console.log(e);
+            if (msg.author.id == e.user.id) {
+              console.log("cant give honor to yourself");
+              msg.reply("Du kannst dich nicht selber Ehren!");
+            } else {
 
-            this.db.all("SELECT * FROM `data` WHERE `server` = ? and `user` = ?",[serverId,userid],(err,res)=>{
-              if (err) {
-                console.log("error getting data");
-                msg.reply("error getting data");
-                return;
-              } else {
-                if (res.length > 0){
-                  // schon ein eintrag vorhanden
-                  console.log("updating entry");
-                  var currVal = res[0].count;
-                  currVal++;
-                  console.log("newval:",currVal);
-                  this.db.run("UPDATE `data` SET `count` = ?, `username` = ? WHERE `user` = ? AND `server` = ?",[currVal,nickname,userid,serverId],(err)=>{
-                    if (err) {
-                      console.log("error writing data");
-                      msg.reply("error writing data");
-                      return;
-                    } else msg.reply(`Erfolg! neue Ehre: ${currVal}`);
-                  });
+              var userid = e.user.id;
+              var nickname = e.nickname || e.user.username;
+
+              this.db.all("SELECT * FROM `data` WHERE `server` = ? and `user` = ?",[serverId,userid],(err,res)=>{
+                if (err) {
+                  console.log("error getting data");
+                  msg.reply("error getting data");
+                  return;
                 } else {
-                  // kein eintrag vorhanden
-                  console.log("inserting new entry");
-                  var currVal = 1;
-                  this.db.run("INSERT INTO `data`(`user`,`server`,`count`,`username`) VALUES (?,?,?,?)",[userid,serverId,currVal,nickname],(err)=>{
-                    if (err) {
-                      console.log("error writing new data");
-                      msg.reply("error writing new data");
-                      return;
-                    } else msg.reply(`Erfolg! neue Ehre: ${currVal}`);
-                  });
+                  if (res.length > 0){
+                    // schon ein eintrag vorhanden
+                    console.log("updating entry");
+                    var currVal = +res[0].count;
+                    if (command[0] == "!ehre") currVal++;
+                    else if (command[0] == "!ehrenlos") currVal--;
+                    console.log("newval:",currVal);
+                    this.db.run("UPDATE `data` SET `count` = ?, `username` = ? WHERE `user` = ? AND `server` = ?",[currVal,nickname,userid,serverId],(err)=>{
+                      if (err) {
+                        console.log("error writing data");
+                        msg.reply("error writing data");
+                        return;
+                      } else msg.reply(`Erfolg! neue Ehre: ${nickname} - ${currVal}`);
+                    });
+                  } else {
+                    // kein eintrag vorhanden
+                    console.log("inserting new entry");
+                    var currVal = 1;
+                    if (command[0] == "!ehrenlos") currVal = 0;
+                    this.db.run("INSERT INTO `data`(`user`,`server`,`count`,`username`) VALUES (?,?,?,?)",[userid,serverId,currVal,nickname],(err)=>{
+                      if (err) {
+                        console.log("error writing new data");
+                        msg.reply("error writing new data");
+                        return;
+                      } else msg.reply(`Erfolg! neue Ehre: ${currVal}`);
+                    });
+                  }
                 }
-              }
-            });
+              });
 
+            }
           });
 
+          this.lastHonors.push({id: userId, time: (new Date()).getTime()});
         }
 
 

@@ -2,7 +2,6 @@ class bot{
   constructor(client){
     this.client = client;
     this.command = "!ehre";
-    this.roles = ["Moderator","1"];
     this.sqlite3 = require("sqlite3").verbose();
     this.db = new this.sqlite3.Database("ehre.sqlite",err=>{
       if (err) {
@@ -17,7 +16,7 @@ class bot{
   start(){
     this.client.on("message",msg=>{
       if (msg.content.startsWith(this.command)){
-        if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
+        //if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
         var serverId = msg.guild.id || 0;
         var command = msg.content.split(" ");
 

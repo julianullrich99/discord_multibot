@@ -12,7 +12,7 @@ class bot{
     });   
     this.discord = require("discord.js");
     this.lastHonors = [];
-    this.timeout = 10;
+    this.timeout = 180;
   }
 
   start(){

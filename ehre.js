@@ -13,10 +13,42 @@ class bot{
     this.discord = require("discord.js");
     this.lastHonors = [];
     this.timeout = 180;
+    this.roles = [
+	{
+	  value: -1,
+	  role: "766243244832063488"
+	},
+	{
+	  value: 6,
+	  role: "766243242790223872"
+	},
+	{
+	  value: 11,
+	  role: "766243240399208471"
+	},
+	{
+	  value: 26,
+	  role: "766243238804717568"
+	},
+	{
+	  value: 51,
+	  role: "766243237202624512"
+	},
+    ]; 
   }
 
   start(){
     this.client.on("message",msg=>{
+
+	//if (msg.content.startsWith("resetRoles")) {
+		//msg.guild.members.fetch().then(m => {
+			//m.forEach(e=>{
+				//console.log("resetting roles of ",m,m.roles);
+				//e.roles.add("766243244832063488").catch(console.error);
+			//});
+		//}).catch(console.error);
+	//}
+
       if (msg.content.startsWith(this.command)){
         //if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
         var serverId = msg.guild.id || 0;
@@ -73,6 +105,7 @@ class bot{
           var mentions = msg.mentions.members;
           mentions.forEach(e=>{
             console.log(e);
+	    console.log(e.roles);
             if (msg.author.id == e.user.id) {
               console.log("cant give honor to yourself");
               msg.reply("Du kannst dich nicht selber Ehren!");
@@ -114,6 +147,27 @@ class bot{
                       } else msg.reply(`Erfolg! neue Ehre: ${currVal}`);
                     });
                   }
+		  // alles glatt gegangen -> rollen ändern
+
+		  var inc = (command[0] == "!ehre");
+		  var lastRole = 0;
+		  var deleteNextRoleFlag = false;
+		  for (var role of this.roles){
+		    if (inc) {
+		      // wir sind eins hoch gegangen _> checken ob wir eine neue rolle brauchen
+		      if (role.value == currVal) {
+			e.roles.add(role.role);
+			e.roles.remove(lastRole);
+		      }
+		    } else {
+		      // wir sind eins runter gegangen -> checken ob wir zurückfallen müssen auf die letze rolle
+		      if (role.value == currVal + 1){
+		  	e.roles.add(lastRole);
+			e.roles.remove(role.role);
+		      }
+		    }
+		    lastRole = role.role;
+		  }
                 }
               });
 

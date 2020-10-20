@@ -56,7 +56,7 @@ class bot{
 
         if (command.length == 1) {
           // get ehrenlist
-          this.db.all("SELECT * FROM `data` WHERE `server` = ?",[serverId],(err,result)=>{
+          this.db.all("SELECT * FROM `data` WHERE `server` = ? ORDER BY `count` DESC, LOWER(`username`) ASC",[serverId],(err,result)=>{
             if (err) {
               console.log("error getting data");
               msg.reply("fehler beim holen der Daten");
@@ -67,11 +67,16 @@ class bot{
               var response = [];
               if (result.length > 0){
                 var list = {};
+		var longest = 0;
                 result.forEach(e=>{
-                  list[e.username] = e.count;
+                  list[e.username] = +e.count;
+		  if (e.username.length > longest) longest = e.username.length;
                 })
 
-                for (var n in list) response.push(`\`${n} - ${list[n]}\``);
+                for (var n in list) response.push(`\`${n.padEnd(longest," ")} ${(list[n]).toString().padStart(3)}\``);
+
+		//response.sort((a,b)=>{return b.count - a.count;});
+		//console.log(response);
 
                 reply.addField("Ergebnis:",response.join("\n"));
               } else {
@@ -104,8 +109,6 @@ class bot{
 
           var mentions = msg.mentions.members;
           mentions.forEach(e=>{
-            console.log(e);
-	    console.log(e.roles);
             if (msg.author.id == e.user.id) {
               console.log("cant give honor to yourself");
               msg.reply("Du kannst dich nicht selber Ehren!");
@@ -132,19 +135,19 @@ class bot{
                         console.log("error writing data");
                         msg.reply("error writing data");
                         return;
-                      } else msg.reply(`Erfolg! neue Ehre: ${nickname} - ${currVal}`);
+                      } else msg.reply(`Erfolg! neue Ehre ${nickname}: ${currVal}`);
                     });
                   } else {
                     // kein eintrag vorhanden
                     console.log("inserting new entry");
                     var currVal = 1;
-                    if (command[0] == "!ehrenlos") currVal = 0;
+                    if (command[0] == "!ehrenlos") currVal = -1;
                     this.db.run("INSERT INTO `data`(`user`,`server`,`count`,`username`) VALUES (?,?,?,?)",[userid,serverId,currVal,nickname],(err)=>{
                       if (err) {
                         console.log("error writing new data");
                         msg.reply("error writing new data");
                         return;
-                      } else msg.reply(`Erfolg! neue Ehre: ${currVal}`);
+                      } else msg.reply(`Erfolg! neue Ehre ${nickname}: ${currVal}`);
                     });
                   }
 		  // alles glatt gegangen -> rollen ändern

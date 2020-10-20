@@ -33,3 +33,7 @@ einsbot.start();
 const ehre = require("./ehre");
 var ehrenbot = new ehre(client);
 ehrenbot.start();
+
+const cuteness = require("./cuteness");
+var cutenessbot = new cuteness(client);
+cutenessbot.start();

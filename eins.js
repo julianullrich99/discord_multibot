@@ -13,9 +13,14 @@ class bot{
         if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
         var command = msg.content.split(" ");
         var count = (isNaN(+command[1])) ? 1 : +command[1];
+	var customMessage = "1";
+	if (command.hasOwnProperty(2)){
+		command.splice(0,2);
+		customMessage = command.join(" ");
+	}
         if (count > 100) count = 100;
         for (var i = 0; i < count; i++) 
-	      msg.channel.send("1");
+	      msg.channel.send(customMessage);
 	
       }
     })

@@ -37,3 +37,7 @@ ehrenbot.start();
 const cuteness = require("./cuteness");
 var cutenessbot = new cuteness(client);
 cutenessbot.start();
+
+const alert1 = require("./alert");
+var alertbot = new alert1(client);
+alertbot.start();

@@ -16,7 +16,7 @@ class bot{
       } else {
         if (!this.channels.hasOwnProperty(msg.author.tag)) {
           msg.reply("Kein Channel gesetzt");
-        } else 
+        } else {
 	  try {
             this.client.channels.cache.get(this.channels[msg.author.tag]).send(msg.content);
 	  } catch (err) {

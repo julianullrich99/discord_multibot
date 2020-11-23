@@ -19,11 +19,12 @@ class bot{
 		this.client.on("message",msg=>{
 			console.log(msg.content);
 
-
+			if (msg.author.tag == "Elora#4431") msg.react("778934956625887243");
+			//if (msg.author.tag == "jukisu#3394") msg.react("778934956625887243");
 
 			if (msg.content.startsWith(this.command)){
 				//if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
-				var serverId = msg.guild.id || 0;
+				var serverId = (msg.hasOwnProperty('guild')) ? msg.guild.id : 0;
 				var command = msg.content.split(" ");
 
 				switch (command[1]){
@@ -137,7 +138,7 @@ class bot{
 
 		if (msg.author.id == this.client.user.id) return;
 
-		var serverId = msg.guild.id || 0;
+		var serverId = (msg.hasOwnProperty('guild')) ? msg.guild.id : 0;
 
 		var message = msg.content.toLowerCase();
 		
@@ -174,7 +175,7 @@ class bot{
 	}
 	
 	initFilter(msg){
-		var serverId = msg.guild.id || 0;
+		var serverId = (msg.hasOwnProperty('guild')) ? msg.guild.id : 0;
 		this.filters[serverId] = [];
 		this.db.all("SELECT * FROM `data` WHERE `server` = ?",[serverId],(err,res)=>{
 			if (err) {

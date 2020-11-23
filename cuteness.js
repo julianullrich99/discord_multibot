@@ -24,7 +24,7 @@ class Bot{
 	var command = msg.content.split(" ");
 
 	if (command.length < 2) {
-	  if (this.currentCuteness < this.maxCuteness) {
+	  if (this.currentCuteness < this.maxCuteness || this.currentPerson.toLowerCase() == "julian") {
 	    // hier wird gevoted
 	    if (this.currentVotes.hasOwnProperty(msg.author.id)){
 	      if (this.currentVotes[msg.author.id] >= this.maxVotes) {

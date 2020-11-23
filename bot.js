@@ -38,6 +38,14 @@ const cuteness = require("./cuteness");
 var cutenessbot = new cuteness(client);
 cutenessbot.start();
 
+const cringe = require("./cringe");
+var cringebot = new cringe(client);
+cringebot.start();
+
 const alert1 = require("./alert");
 var alertbot = new alert1(client);
 alertbot.start();
+
+const answer = require("./answerBot");
+var answerbot = new answer(client);
+answerbot.start();

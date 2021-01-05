@@ -76,19 +76,18 @@ class bot{
                 var responseLength = 0;
                 for (var n in list) {
                   let next = `\`${n.padEnd(longest, " ")} ${(list[n]).toString().padStart(3)}\``;
-                  if (responseLength + next.length <= 1024){
+                  if (responseLength + next.length <= 1000){
                     response.push(next);
-                    responseLength += next.length;
+                    responseLength += next.length + 1;
                   } else {
                     reply.addField("-", response.join("\n"));
                     response = [];
                     response.push(next);
-                    responseLength = next.length;
+                    responseLength = next.length + 1;
                   }
                 }
 
-
-                reply.addField("Ergebnis:", response.join("\n"));
+                reply.addField("-", response.join("\n"));
 
                 //response.sort((a,b)=>{return b.count - a.count;});
                 //console.log(response);

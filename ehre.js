@@ -56,7 +56,7 @@ class bot{
 
         if (command.length == 1) {
           // get ehrenlist
-          this.db.all("SELECT * FROM `data` WHERE `server` = ? ORDER BY `count` DESC, LOWER(`username`) ASC",[serverId],(err,result)=>{
+          this.db.all("SELECT * FROM `data` WHERE `server` = ? ORDER BY `count` DESC, LOWER(`username`) ASC", [serverId], (err, result) => {
             if (err) {
               console.log("error getting data");
               msg.reply("fehler beim holen der Daten");
@@ -65,26 +65,36 @@ class bot{
                 .setTitle(`Ehrenliste`)
                 .setFooter("Ehrenbot von Julian Ullrich");
               var response = [];
-              if (result.length > 0){
+              if (result.length > 0) {
                 var list = {};
-		var longest = 0;
-                result.forEach(e=>{
+                var longest = 0;
+                result.forEach(e => {
                   list[e.username] = +e.count;
-		  if (e.username.length > longest) longest = e.username.length;
-                })
+                  if (e.username.length > longest) longest = e.username.length;
+                });
 
-		responseLength = 0;
+                var responseLength = 0;
                 for (var n in list) {
-		  response.push(`\`${n.padEnd(longest," ")} ${(list[n]).toString().padStart(3)}\``);
-		  
-		}
+                  let next = `\`${n.padEnd(longest, " ")} ${(list[n]).toString().padStart(3)}\``;
+                  if (responseLength + next.length <= 1024){
+                    response.push(next);
+                    responseLength += next.length;
+                  } else {
+                    reply.addField("-", response.join("\n"));
+                    response = [];
+                    response.push(next);
+                    responseLength = next.length;
+                  }
+                }
 
-		//response.sort((a,b)=>{return b.count - a.count;});
-		//console.log(response);
 
-                reply.addField("Ergebnis:",response.join("\n"));
+                reply.addField("Ergebnis:", response.join("\n"));
+
+                //response.sort((a,b)=>{return b.count - a.count;});
+                //console.log(response);
+
               } else {
-                reply.addField("Suche:","Keine passenden Einträge gefunden. Schade :(");
+                reply.addField("Suche:", "Keine passenden Einträge gefunden. Schade :(");
               }
 
               msg.reply(reply);

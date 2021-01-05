@@ -11,7 +11,6 @@ class bot{
 		});   
 		this.discord = require("discord.js");
 		this.command = "!alert";
-		this.fuzzy = require("fuzzy");
 		this.filters = {};
 }
 

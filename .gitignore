@@ -1,1 +1,4 @@
 .env
+*.sqlite
+*.swp
+node_modules

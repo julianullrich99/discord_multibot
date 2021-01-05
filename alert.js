@@ -19,7 +19,7 @@ class bot{
 		this.client.on("message",msg=>{
 			console.log(msg.content);
 
-			if (msg.author.tag == "Elora#4431") msg.react("778934956625887243");
+			//if (msg.author.tag == "Elora#4431") msg.react("778934956625887243");
 			//if (msg.author.tag == "jukisu#3394") msg.react("778934956625887243");
 
 			if (msg.content.startsWith(this.command)){

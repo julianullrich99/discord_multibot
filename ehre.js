@@ -73,7 +73,11 @@ class bot{
 		  if (e.username.length > longest) longest = e.username.length;
                 })
 
-                for (var n in list) response.push(`\`${n.padEnd(longest," ")} ${(list[n]).toString().padStart(3)}\``);
+		responseLength = 0;
+                for (var n in list) {
+		  response.push(`\`${n.padEnd(longest," ")} ${(list[n]).toString().padStart(3)}\``);
+		  
+		}
 
 		//response.sort((a,b)=>{return b.count - a.count;});
 		//console.log(response);
@@ -150,7 +154,8 @@ class bot{
                       } else msg.reply(`Erfolg! neue Ehre ${nickname}: ${currVal}`);
                     });
                   }
-		  // alles glatt gegangen -> rollen ändern
+		  // alles glatt gegangen -> rollen ändern, timeout setzen
+		  this.lastHonors.push({id: userId, time: (new Date()).getTime()});
 
 		  var inc = (command[0] == "!ehre");
 		  var lastRole = 0;
@@ -177,7 +182,6 @@ class bot{
             }
           });
 
-          this.lastHonors.push({id: userId, time: (new Date()).getTime()});
         }
 
 

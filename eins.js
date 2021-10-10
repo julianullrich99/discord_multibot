@@ -10,9 +10,9 @@ class bot{
       //console.log("msg",msg.content);
       //console.log("channel",msg.channel.id);
       if (msg.content.startsWith(this.command)){
-        if (!msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
         var command = msg.content.split(" ");
         var count = (isNaN(+command[1])) ? 1 : +command[1];
+        if (count > 1 && !msg.member.roles.cache.some(r=>this.roles.includes(r.name)) ) return;
 	var customMessage = "1";
 	if (command.hasOwnProperty(2)){
 		command.splice(0,2);

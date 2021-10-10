@@ -13,6 +13,10 @@ client.on("ready", ()=>{
 
 client.login(process.env.DISCORD_TOKEN)
 
+const info = require("./info");
+var infobot = new info(client);
+infobot.start();
+
 
 const deleteBot = require("./deleteBot");
 var delBot = new deleteBot(client);

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bot": "node bot.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,6 @@
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "fuzzy": "^0.1.3",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.2"
   }
 }

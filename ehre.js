@@ -13,28 +13,6 @@ class bot{
     this.discord = require("discord.js");
     this.lastHonors = [];
     this.timeout = 180;
-    this.roles = [
-	{
-	  value: -1,
-	  role: "766243244832063488"
-	},
-	{
-	  value: 6,
-	  role: "766243242790223872"
-	},
-	{
-	  value: 11,
-	  role: "766243240399208471"
-	},
-	{
-	  value: 26,
-	  role: "766243238804717568"
-	},
-	{
-	  value: 51,
-	  role: "766243237202624512"
-	},
-    ]; 
   }
 
   start(){
@@ -43,8 +21,6 @@ class bot{
 	//if (msg.content.startsWith("resetRoles")) {
 		//msg.guild.members.fetch().then(m => {
 			//m.forEach(e=>{
-				//console.log("resetting roles of ",m,m.roles);
-				//e.roles.add("766243244832063488").catch(console.error);
 			//});
 		//}).catch(console.error);
 	//}
@@ -167,24 +143,6 @@ class bot{
 		  this.lastHonors.push({id: userId, time: (new Date()).getTime()});
 
 		  var inc = (command[0] == "!ehre");
-		  var lastRole = 0;
-		  var deleteNextRoleFlag = false;
-		  for (var role of this.roles){
-		    if (inc) {
-		      // wir sind eins hoch gegangen _> checken ob wir eine neue rolle brauchen
-		      if (role.value == currVal) {
-			e.roles.add(role.role);
-			e.roles.remove(lastRole);
-		      }
-		    } else {
-		      // wir sind eins runter gegangen -> checken ob wir zurückfallen müssen auf die letze rolle
-		      if (role.value == currVal + 1){
-		  	e.roles.add(lastRole);
-			e.roles.remove(role.role);
-		      }
-		    }
-		    lastRole = role.role;
-		  }
                 }
               });
 
